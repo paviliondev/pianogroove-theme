@@ -22,6 +22,8 @@
       const path = args.currentPath.toLowerCase();
       let contents = [];
       let header = [];
+      let title;
+      let description;
 
       console.log(path, category);
 
@@ -33,20 +35,24 @@
             }
           })
         ));
-
-        header.push(h('div.text', [
-          h('div.title', category.get('name')),
-          h('div.description', new RawHtml({
-            html: `<span>${emojiUnescape(category.get('description'))}</span>`
-          }))
-        ]));
+        title = category.get('name');
+        description = category.get('description');
       } else if (path.indexOf('categories') > -1) {
-        header.push(h('div.text', [
-          h('div.title', Discourse.SiteSettings.title),
-          h('div.description', new RawHtml({
-            html: `<span>${emojiUnescape(Discourse.SiteSettings.site_description)}</span>`
-          }))
-        ]))
+        title = settings.home_title;
+        description = settings.home_description;
+      }
+
+      if (title || description) {
+        let text = [];
+        if (title) {
+          text.push(h('div.title', title))
+        }
+        if (description) {
+          text.push(h('div.description', new RawHtml({
+            html: `<span>${emojiUnescape(description)}</span>`
+          })))
+        }
+        header.push(h('div.text', text));
       }
 
       contents.push(h('div.header', header));
