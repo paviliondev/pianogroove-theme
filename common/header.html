@@ -88,7 +88,8 @@
     },
 
     menuItems() {
-      const menuCategoriesSlugs = ['practice-inspiration', 'lessons', 'theory', 'records-musicians', 'software'];
+      const menuCategoriesSlugs = settings.menu_slugs.split(',');
+      console.log(menuCategoriesSlugs)
       const menuCategories = this.site.categories.filter(c => menuCategoriesSlugs.indexOf(c.slug) > -1);
       let items = [];
 
