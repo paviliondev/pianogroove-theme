@@ -40,7 +40,7 @@
             html: `<span>${emojiUnescape(category.get('description'))}</span>`
           }))
         ]));
-      } else {
+      } else if (path.indexOf('categories') > -1) {
         header.push(h('div.text', [
           h('div.title', Discourse.SiteSettings.title),
           h('div.description', new RawHtml({
