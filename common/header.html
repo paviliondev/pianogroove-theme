@@ -44,7 +44,7 @@
         header.push(h('div.text', [
           h('div.title', Discourse.SiteSettings.title),
           h('div.description', new RawHtml({
-            html: `<span>${emojiUnescape(Discourse.SiteSettings.description)}</span>`
+            html: `<span>${emojiUnescape(Discourse.SiteSettings.site_description)}</span>`
           }))
         ]))
       }
