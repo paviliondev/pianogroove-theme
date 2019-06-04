@@ -1,0 +1,136 @@
+<script type="text/discourse-plugin" version="0.8">
+  const container = Discourse.__container__;
+  const { h } = require('virtual-dom');
+  const { emojiUnescape } = require('discourse/lib/text');
+  const RawHtml = require("discourse/widgets/raw-html").default;
+  const { iconNode } = require("discourse-common/lib/icon-library");
+
+
+  api.createWidget('pianogroove-header-widget', {
+    tagName: 'div.pianogroove-header',
+    buildKey: () => `pianogroove-header`,
+
+    defaultState() {
+      return {
+        showMenu: false
+      }
+    },
+
+    html(args, state) {
+      const controller = this.register.lookup('controller:navigation/category');
+      const category = controller.get("category");
+      const path = args.currentPath.toLowerCase();
+      let contents = [];
+      let header = [];
+
+      console.log(path, category);
+
+      if (path.indexOf('category') > -1) {
+        header.push(h('div.image',
+          h('img', {
+            attributes: {
+              src: Discourse.getURLWithCDN(category.get("uploaded_logo.url"))
+            }
+          })
+        ));
+
+        header.push(h('div.text', [
+          h('div.title', category.get('name')),
+          h('div.description', new RawHtml({
+            html: `<span>${emojiUnescape(category.get('description'))}</span>`
+          }))
+        ]));
+      } else {
+        header.push(h('div.text', [
+          h('div.title', Discourse.SiteSettings.title),
+          h('div.description', new RawHtml({
+            html: `<span>${emojiUnescape(Discourse.SiteSettings.description)}</span>`
+          }))
+        ]))
+      }
+
+      contents.push(h('div.header', header));
+
+      let menu = [];
+
+      if (this.site.mobileView) {
+        menu.push(
+          this.attach('link', {
+            rawTitle: 'Forum Menu',
+            rawLabel: 'Forum Menu',
+            action: 'toggleMenu',
+            className: 'btn btn-header',
+            contents: () => {
+              let icon = state.showMenu ? 'times' : 'bars'
+              return [
+                h('span', 'Forum Menu'),
+                iconNode(icon)
+              ];
+            }
+          })
+        );
+
+        if (state.showMenu) {
+          menu.push(h('div.menu-items', this.menuItems()));
+        }
+      } else {
+        menu.push(...this.menuItems());
+      }
+
+      contents.push(h('div.menu', menu));
+
+
+      return h('div.content', contents);
+    },
+
+    toggleMenu() {
+      this.state.showMenu = !this.state.showMenu;
+    },
+
+    menuItems() {
+      const menuCategoriesSlugs = ['practice-inspiration', 'lessons', 'theory', 'records-musicians', 'software'];
+      const menuCategories = this.site.categories.filter(c => menuCategoriesSlugs.indexOf(c.slug) > -1);
+      let items = [];
+
+      items.push(this.attach('link', {
+        rawTitle: 'Forum Home',
+        rawLabel: 'Forum Home',
+        href: '/categories',
+        className: 'btn btn-header',
+        contents: () => {
+          return [
+            h('span', 'Forum Home'),
+            h(`div.btn-image.home`)
+          ];
+        }
+      }))
+
+      menuCategories.forEach(c => {
+        items.push(this.attach('link', {
+          rawTitle: c.name,
+          rawLabel: c.name,
+          href: c.url,
+          className: 'btn btn-header',
+          contents: () => {
+            return [
+              h('span', c.name),
+              h(`div.btn-image.${c.slug}`)
+            ];
+          }
+        }));
+      });
+
+      return items;
+    }
+  })
+
+  api.decorateWidget('pianogroove-header-widget:after', helper => {
+    helper.widget.appEvents.on('page:changed', () => {
+      helper.widget.scheduleRerender();
+    });
+  });
+</script>
+
+<script type='text/x-handlebars' data-template-name='/connectors/below-site-header/pianogroove-header-container'>
+  {{mount-widget widget="pianogroove-header-widget" args=(hash currentPath=currentPath)}}
+</script>

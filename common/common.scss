@@ -1,0 +1,107 @@
+$pianogroove-blue: #153C50;
+$pianogroove-blue-dark: #0F2B39;
+$pianogroove-blue-light: #F2F5F6;
+$pianogroove-gold: #C6AE77;
+$pianogroove-gold-dark: #A28C58;
+
+#main {
+  background-color: $pianogroove-blue-light;
+}
+
+#main-outlet {
+  background-color: white;
+  padding-top: 1.5em;
+}
+
+.pianogroove-header-container {
+
+}
+
+.pianogroove-header {
+  padding-top: 60px;
+  background-color: $pianogroove-blue;
+  color: white;
+
+  .content {
+    width: 1126px;
+    margin: 0 auto;
+  }
+
+  .header {
+    display: inline-flex;
+    margin: 40px 0;
+    min-height: 100px;
+  }
+
+  .image {
+    margin-right: 30px;
+
+    img {
+      max-width: 70px;
+    }
+  }
+
+  .text {
+    .title {
+      font-size: 2em;
+    }
+  }
+
+  .menu {
+    display: flex;
+    margin-top: auto;
+
+    .btn-header {
+      width: calc(100%/5);
+      text-align: left;
+      padding: 25px 18px;
+    }
+  }
+}
+
+.category-heading {
+  display: none;
+}
+
+.btn-blue {
+  background-color: $pianogroove-blue;
+}
+
+html, html.discourse-no-touch, html.discourse-touch {
+  .btn-gold {
+    background-color: $pianogroove-gold;
+    color: white;
+
+    a, .d-icon {
+      color: white;
+    }
+
+    &:hover, &.active {
+      background-color: $pianogroove-gold-dark;
+    }
+  }
+
+  .btn-header {
+    @extend .btn-gold;
+  }
+
+  .nav-pills>li a {
+    &:hover {
+      background-color: rgba($pianogroove-gold, 0.5);
+      color: $primary;
+    }
+
+    &.active {
+      background-color: $pianogroove-gold-dark;
+      color: white;
+    }
+  }
+
+  .d-header .login-button {
+    @extend .btn-blue;
+  }
+
+  .d-header button.sign-up-button {
+    @extend .btn-gold;
+  }
+}
