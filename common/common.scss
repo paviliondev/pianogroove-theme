@@ -223,6 +223,12 @@ html, html.discourse-no-touch, html.discourse-touch {
     justify-content: center;
     align-items: center;
 
+    .logo {
+      img {
+        width: 120px;
+      }
+    }
+
     .btn-cta {
       margin: 20px 0;
       background-color: $pianogroove-turquoise;
