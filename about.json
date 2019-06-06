@@ -3,6 +3,15 @@
   "about_url": null,
   "license_url": null,
   "assets": {
+    "home": "assets/home.png",
+    "lessons": "assets/lessons.png",
+    "listening": "assets/listening.png",
+    "practice": "assets/practice.png",
+    "software": "assets/software.png",
+    "theory": "assets/theory.png",
+    "background": "assets/background.jpg",
+    "background-mobile": "assets/background-mobile.jpg",
+    "check": "assets/check.png"
   },
   "color_schemes": {
   },

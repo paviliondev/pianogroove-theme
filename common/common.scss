@@ -1,8 +1,11 @@
-$pianogroove-blue: #153C50;
-$pianogroove-blue-dark: #0F2B39;
+@import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+
+$pianogroove-blue: #003d52;
+$pianogroove-blue-dark: #032c3a;
 $pianogroove-blue-light: #F2F5F6;
-$pianogroove-gold: #C6AE77;
+$pianogroove-gold: #caad6f;
 $pianogroove-gold-dark: #A28C58;
+$pianogroove-turquoise: #00b38f;
 
 #main {
   background-color: $pianogroove-blue-light;
@@ -14,23 +17,39 @@ $pianogroove-gold-dark: #A28C58;
 }
 
 .pianogroove-header-container {
-
+  font-family: 'Poppins', sans-serif;
+  padding-top: 60px;
 }
 
 .pianogroove-header {
-  padding-top: 60px;
+  height: 510px;
   background-color: $pianogroove-blue;
   color: white;
+
+  &.discovery-categories {
+    background-image: url($background);
+    background-repeat: no-repeat;
+    background-position: center;
+  }
 
   .content {
     width: 1126px;
     margin: 0 auto;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   .header {
     display: inline-flex;
-    margin: 40px 0;
-    min-height: 100px;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1 1 auto;
+  }
+
+  .header-wrapper {
+    display: flex;
+    align-items: center;
   }
 
   .image {
@@ -43,7 +62,12 @@ $pianogroove-gold-dark: #A28C58;
 
   .text {
     .title {
-      font-size: 2em;
+      font-size: 3em;
+      font-weight: 800;
+    }
+
+    .description {
+      font-size: 1.6em;
     }
   }
 
@@ -54,8 +78,44 @@ $pianogroove-gold-dark: #A28C58;
     .btn-header {
       width: calc(100%/5);
       text-align: left;
-      padding: 25px 18px;
-      font-size: 1.1em;
+      padding: 22px 18px;
+      font-size: 1em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .btn-image {
+      height: 25px;
+      width: 25px;
+      background-size: 25px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+
+      &.home {
+        background-image: url($home);
+      }
+
+      &.practice-inspiration {
+        background-image: url($practice);
+      }
+
+      &.lessons {
+        background-image: url($lessons);
+      }
+
+      &.theory {
+        background-image: url($theory);
+      }
+
+      &.records-musicians {
+        background-image: url($listening);
+      }
+
+      &.software {
+        background-image: url($software);
+      }
     }
   }
 }
@@ -104,5 +164,84 @@ html, html.discourse-no-touch, html.discourse-touch {
 
   .d-header button.sign-up-button {
     @extend .btn-gold;
+  }
+}
+
+.pianogroove-guest-overlay {
+  position: relative;
+}
+
+.guest-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 999999;
+  color: white;
+  background-color: rgba(0,0,0,0.85);
+  display: flex;
+  justify-content: space-around;
+
+  .text {
+    padding: 20px;
+    box-sizing: border-box;
+    display: inline-block;
+
+    .title {
+      font-size: 1.6em;
+    }
+  }
+
+  .list {
+    margin-top: 10px;
+
+    ul {
+      margin: 0;
+
+      li {
+        list-style: none;
+        margin: 5px 0;
+      }
+
+      li:before{
+         content: '';
+         display: inline-block;
+         vertical-align: middle;
+         height: 15px;
+         width: 15px;
+         margin-right: 10px;
+         background-image: url($check);
+         background-size:contain;
+         background-repeat:no-repeat;
+      }
+    }
+  }
+
+  .cta {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .btn-cta {
+      margin: 20px 0;
+      background-color: $pianogroove-turquoise;
+      padding: 15px 30px;
+      font-size: 1.2em;
+      font-weight: 800;
+      text-transform: uppercase;
+
+      &:hover {
+        background-color: $pianogroove-turquoise;
+      }
+
+      .d-label {
+        color: white;
+      }
+    }
+
+    .login span {
+      margin-right: 5px;
+    }
   }
 }

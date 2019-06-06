@@ -1,3 +1,9 @@
 menu_slugs: ''
 home_title: ''
 home_description: ''
+guest_overlay_title: ''
+guest_overlay_list:
+  type: list
+  default: ""
+  description:
+    en: A list of text items that appears on the guest overlay

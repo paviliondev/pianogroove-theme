@@ -1,4 +1,10 @@
 .pianogroove-header {
+  height: 510px;
+
+  &.discovery-categories {
+    background-image: url($background-mobile);
+  }
+
   .content {
     width: 100%;
   }

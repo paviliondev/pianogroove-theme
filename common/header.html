@@ -5,7 +5,6 @@
   const RawHtml = require("discourse/widgets/raw-html").default;
   const { iconNode } = require("discourse-common/lib/icon-library");
 
-
   api.createWidget('pianogroove-header-widget', {
     tagName: 'div.pianogroove-header',
     buildKey: () => `pianogroove-header`,
@@ -16,6 +15,10 @@
       }
     },
 
+    buildClasses(args) {
+      return args.currentPath.split('.').join('-').dasherize();
+    },
+
     html(args, state) {
       const controller = this.register.lookup('controller:navigation/category');
       const category = controller.get("category");
@@ -24,8 +27,6 @@
       let header = [];
       let title;
       let description;
-
-      console.log(path, category);
 
       if (path.indexOf('category') > -1) {
         header.push(h('div.image',
@@ -55,7 +56,7 @@
         header.push(h('div.text', text));
       }
 
-      contents.push(h('div.header', header));
+      contents.push(h('div.header', h('div.header-wrapper', header)));
 
       let menu = [];
 
@@ -85,7 +86,6 @@
 
       contents.push(h('div.menu', menu));
 
-
       return h('div.content', contents);
     },
 
@@ -95,7 +95,6 @@
 
     menuItems() {
       const menuCategoriesSlugs = settings.menu_slugs.split(',');
-      console.log(menuCategoriesSlugs)
       const menuCategories = this.site.categories.filter(c => menuCategoriesSlugs.indexOf(c.slug) > -1);
       let items = [];
 
@@ -131,7 +130,79 @@
     }
   })
 
+  api.createWidget('guest-overlay', {
+    tagName: 'div.guest-overlay',
+
+    html(attrs) {
+      let contents = [];
+      let text = [];
+      let list = settings.guest_overlay_list.split('|');
+
+      text.push(h('div.title', settings.guest_overlay_title));
+
+      if (list) {
+        list = list.map(item => h('li', item));
+        text.push(h('div.list', h('ul', list)));
+      }
+
+      contents.push(h('div.text', text));
+
+      contents.push(h('div.cta', [
+        h('div.logo', h('img', { attributes: { src: Discourse.SiteSettings.logo }})),
+        this.attach('link', {
+          href: '/join',
+          rawLabel: 'Get Started',
+          rawTitle: 'Get Started',
+          className: 'btn btn-cta'
+        }),
+        h('div.login', [
+          h('span', 'Do you have an account?'),
+          this.attach('link', {
+            href: '/login',
+            rawLabel: 'Login',
+            rawTitle: 'Login',
+            className: 'login-link'
+          })
+        ])
+      ]))
+
+      return contents;
+    }
+  })
+
+  api.createWidget('pianogroove-guest-overlay', {
+    tagName: 'div.pianogroove-guest-overlay',
+
+    html(args, state) {
+      const path = args.currentPath.toLowerCase();
+      let contents = [];
+
+      $('html').css('overflow-y', 'scroll');
+
+      if (path.indexOf('topic') > -1) {
+        if (!this.currentUser) {
+          contents.push(this.attach('guest-overlay'));
+          Ember.run.scheduleOnce('afterRender', () => {
+            let offset = $('.pianogroove-header-container').height() + 60;
+            let height = $(window).height() - offset;
+
+            $('.guest-overlay').height(height);
+            $('html').css('overflow', 'hidden');
+          });
+        }
+      }
+
+      return contents;
+    }
+  });
+
   api.decorateWidget('pianogroove-header-widget:after', helper => {
+    helper.widget.appEvents.on('page:changed', () => {
+      helper.widget.scheduleRerender();
+    });
+  });
+
+  api.decorateWidget('pianogroove-guest-overlay:after', helper => {
     helper.widget.appEvents.on('page:changed', () => {
       helper.widget.scheduleRerender();
     });
@@ -140,4 +211,5 @@
 
 <script type='text/x-handlebars' data-template-name='/connectors/below-site-header/pianogroove-header-container'>
   {{mount-widget widget="pianogroove-header-widget" args=(hash currentPath=currentPath)}}
+  {{mount-widget widget="pianogroove-guest-overlay" args=(hash currentPath=currentPath)}}
 </script>
