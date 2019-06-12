@@ -134,21 +134,25 @@
     tagName: 'div.guest-overlay',
 
     html(attrs) {
+      const isMobile = this.site.mobileView;
       let contents = [];
       let text = [];
       let list = settings.guest_overlay_list.split('|');
+      let cta = [];
 
-      text.push(h('div.title', settings.guest_overlay_title));
+      if (isMobile) {
+        cta.push(h('div.title', settings.guest_overlay_title));
+      } else {
+        text.push(h('div.title', settings.guest_overlay_title));
+        cta.push(h('div.logo', h('img', { attributes: { src: Discourse.SiteSettings.logo }})))
+      }
 
       if (list) {
         list = list.map(item => h('li', item));
         text.push(h('div.list', h('ul', list)));
       }
 
-      contents.push(h('div.text', text));
-
-      contents.push(h('div.cta', [
-        h('div.logo', h('img', { attributes: { src: Discourse.SiteSettings.logo }})),
+      cta.push([
         this.attach('link', {
           href: '/join',
           rawLabel: 'Get Started',
@@ -164,9 +168,49 @@
             className: 'login-link'
           })
         ])
-      ]))
+      ]);
 
-      return contents;
+      let textNode = h('div.text', { attributes: { id: 'overlay-text' }}, text);
+      let ctaNode = h('div.cta', { attributes: { id: 'overlay-cta' }}, cta);
+
+      if (isMobile) {
+        contents.push(ctaNode);
+        contents.push(textNode);
+      } else {
+        contents.push(textNode);
+        contents.push(ctaNode);
+      }
+
+      let html = [h('div.content', contents)];
+
+      if (isMobile) {
+        html.push(h('div.mobile-menu', [
+            this.attach('link', {
+              action: 'scrollTo',
+              actionParam: 'overlay-cta',
+              className: 'overlay-cta-link active'
+            }),
+            this.attach('link', {
+              action: 'scrollTo',
+              actionParam: 'overlay-text',
+              className: 'overlay-text-link'
+            })
+          ])
+        )
+      }
+
+      return html;
+    },
+
+    scrollTo(id) {
+      let scrollLeft = $(`#${id}`).offset().left;
+      if (scrollLeft !== 0) {
+        $('.guest-overlay .content').animate({ scrollLeft }, 20, () => {
+          console.log('running')
+          $('.mobile-menu > a').removeClass('active');
+          $(`.${id}-link`).addClass('active');
+        });
+      }
     }
   })
 
@@ -183,10 +227,6 @@
         if (!this.currentUser) {
           contents.push(this.attach('guest-overlay'));
           Ember.run.scheduleOnce('afterRender', () => {
-            let offset = $('.pianogroove-header-container').height() + 60;
-            let height = $(window).height() - offset;
-
-            $('.guest-overlay').height(height);
             $('html').css('overflow', 'hidden');
           });
         }
