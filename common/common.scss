@@ -274,6 +274,7 @@ html, html.discourse-no-touch, html.discourse-touch {
     line-height: 1.2em;
     height: 40px;
     width: auto;
+    max-width: calc(100% - 75px);
   }
 
   .clear {
