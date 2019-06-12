@@ -4,6 +4,72 @@
   const { emojiUnescape } = require('discourse/lib/text');
   const RawHtml = require("discourse/widgets/raw-html").default;
   const { iconNode } = require("discourse-common/lib/icon-library");
+  const DiscourseURL = require("discourse/lib/url").default;
+
+  api.createWidget('pianogroove-header-search', {
+    tagName: 'div.pianogroove-header-search',
+    buildKey: () => `pianogroove-header-search`,
+
+    defaultState() {
+      return {
+        term: ''
+      }
+    },
+
+    queryTerm() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('search');
+    },
+
+    html(attrs, state) {
+      let contents = [];
+      let term = state.term || '';
+      let queryTerm = this.queryTerm();
+
+      if (!term && queryTerm) {
+        term = queryTerm;
+      }
+
+      contents.push(h('input', { attributes: { placeholder: 'Search Forum', value: term }}));
+
+      if (term) {
+        contents.push(h('div.clear', this.attach('button', {
+          action: 'clearSearch',
+          icon: 'times'
+        })));
+      }
+
+      contents.push(this.attach('button', {
+        action: 'search',
+        icon: 'search',
+        contents: h("span.d-button-label", 'SEARCH')
+      }));
+
+      return contents;
+    },
+
+    search() {
+      const term = this.state.term;
+      DiscourseURL.routeTo("/latest?search=" + term);
+    },
+
+    clearSearch() {
+      this.state.term = '';
+      $('.pianogroove-header-search input').val('');
+      const queryTerm = this.queryTerm();
+      if (queryTerm) {
+        DiscourseURL.routeTo("/latest");
+      }
+    },
+
+    keyUp(e) {
+      this.state.term = $('.pianogroove-header-search input').val();
+
+      if (e.which === 13) {
+        this.search();
+      }
+    }
+  });
 
   api.createWidget('pianogroove-header-widget', {
     tagName: 'div.pianogroove-header',
@@ -23,12 +89,14 @@
       const controller = this.register.lookup('controller:navigation/category');
       const category = controller.get("category");
       const path = args.currentPath.toLowerCase();
+      let isCategory = path.indexOf('category') > -1;
+      let isHome = path == 'discovery.latest' || path == 'discovery.categories';
       let contents = [];
       let header = [];
       let title;
       let description;
 
-      if (path.indexOf('category') > -1) {
+      if (isCategory) {
         header.push(h('div.image',
           h('img', {
             attributes: {
@@ -38,7 +106,7 @@
         ));
         title = category.get('name');
         description = category.get('description');
-      } else if (path.indexOf('categories') > -1) {
+      } else if (isHome) {
         title = settings.home_title;
         description = settings.home_description;
       }
@@ -52,6 +120,9 @@
           text.push(h('div.description', new RawHtml({
             html: `<span>${emojiUnescape(description)}</span>`
           })))
+        }
+        if (isHome) {
+          text.push(this.attach('pianogroove-header-search'));
         }
         header.push(h('div.text', text));
       }
@@ -206,7 +277,6 @@
       let scrollLeft = $(`#${id}`).offset().left;
       if (scrollLeft !== 0) {
         $('.guest-overlay .content').animate({ scrollLeft }, 20, () => {
-          console.log('running')
           $('.mobile-menu > a').removeClass('active');
           $(`.${id}-link`).addClass('active');
         });

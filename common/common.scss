@@ -256,3 +256,42 @@ html, html.discourse-no-touch, html.discourse-touch {
     }
   }
 }
+
+.pianogroove-header-search {
+  width: 400px;
+  background-color: white;
+  margin-top: 15px;
+  padding: 5px 5px 5px 25px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  input {
+    flex: 1 1 auto;
+    border: none;
+    font-size: 1.2em;
+    line-height: 1.2em;
+    height: 40px;
+  }
+
+  .clear {
+    position: absolute;
+    right: 130px;
+
+    .btn {
+      background-color: transparent;
+    }
+  }
+
+  > .btn {
+    background-color: $pianogroove-blue;
+    color: white;
+    padding: 20px;
+    border-radius: 50px;
+
+    .fa {
+      color: white;
+    }
+  }
+}
