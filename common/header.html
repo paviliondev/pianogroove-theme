@@ -39,11 +39,16 @@
         })));
       }
 
-      contents.push(this.attach('button', {
+      let searchBtnAttrs =  {
         action: 'search',
-        icon: 'search',
-        contents: h("span.d-button-label", 'SEARCH')
-      }));
+        icon: 'search'
+      }
+
+      if (!this.site.mobileView) {
+        searchBtnAttrs['contents'] = h("span.d-button-label", 'SEARCH');
+      }
+
+      contents.push(this.attach('button', searchBtnAttrs));
 
       return contents;
     },

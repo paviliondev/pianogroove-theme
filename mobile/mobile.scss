@@ -27,6 +27,10 @@ $pianogroove-turquoise: #00b38f;
 
   .header {
     margin: 40px 20px;
+
+    .text {
+      width: 100%;
+    }
   }
 
   .menu {
@@ -103,5 +107,14 @@ $pianogroove-turquoise: #00b38f;
     a.active {
       background-color: rgba($pianogroove-turquoise, 1);
     }
+  }
+}
+
+.pianogroove-header-search {
+  width: 100%;
+  box-sizing: border-box;
+
+  .clear {
+    right: 55px;
   }
 }
