@@ -12,7 +12,8 @@
 
     defaultState() {
       return {
-        term: ''
+        term: '',
+        searchRoute: false
       }
     },
 
@@ -24,10 +25,18 @@
     html(attrs, state) {
       let contents = [];
       let term = state.term || '';
+      let path = attrs.path;
       let queryTerm = this.queryTerm();
 
       if (!term && queryTerm) {
         term = queryTerm;
+      }
+
+      if (path !== 'discovery.latest' && state.searchRoute) {
+        state.searchRoute = false;
+        state.term = '';
+        term = '';
+        $('.pianogroove-header-search input').val('');
       }
 
       contents.push(h('input', { attributes: { placeholder: 'Search Forum', value: term }}));
@@ -55,14 +64,19 @@
 
     search() {
       const term = this.state.term;
-      DiscourseURL.routeTo("/latest?search=" + term);
+      DiscourseURL.routeTo("/latest?search=" + term, {
+        afterRouteComplete: () => {
+          this.state.searchRoute = true;
+        },
+        replaceURL: true
+      });
     },
 
     clearSearch() {
       this.state.term = '';
       $('.pianogroove-header-search input').val('');
-      const queryTerm = this.queryTerm();
-      if (queryTerm) {
+      this.scheduleRerender();
+      if (this.state.searchRoute) {
         DiscourseURL.routeTo("/latest");
       }
     },
@@ -82,24 +96,40 @@
 
     defaultState() {
       return {
-        showMenu: false
+        showMenu: false,
+        contentsCache: null,
+        categoryRoute: null,
       }
     },
 
-    buildClasses(args) {
-      return args.currentPath.split('.').join('-').dasherize();
+    buildClasses(args, state) {
+      let path = args.currentPath;
+      let classes = path.split('.').join('-').dasherize();
+      if (path == 'discovery.loading') {
+        classes += state.categoryRoute ? ' loading-category' : ' loading-home';
+      }
+      return classes;
     },
 
     html(args, state) {
       const controller = this.register.lookup('controller:navigation/category');
       const category = controller.get("category");
       const path = args.currentPath.toLowerCase();
+      let isLoading = path === 'discovery.loading';
       let isCategory = path.indexOf('category') > -1;
-      let isHome = path == 'discovery.latest' || path == 'discovery.categories';
+      let isHome = path == 'discovery.latest' || path == 'discovery.categories' || path == 'discovery.top';
       let contents = [];
       let header = [];
       let title;
       let description;
+
+      if (isLoading) {
+        if (state.contentsCache) {
+          return h('div.content', state.contentsCache);
+        }
+      } else {
+        state.categoryRoute = isCategory;
+      }
 
       if (isCategory) {
         header.push(h('div.image',
@@ -127,7 +157,7 @@
           })))
         }
         if (isHome) {
-          text.push(this.attach('pianogroove-header-search'));
+          text.push(this.attach('pianogroove-header-search', { path }));
         }
         header.push(h('div.text', text));
       }
@@ -162,6 +192,8 @@
 
       contents.push(h('div.menu', menu));
 
+      this.state.contentsCache = contents;
+
       return h('div.content', contents);
     },
 
@@ -177,7 +209,8 @@
       items.push(this.attach('link', {
         rawTitle: 'Forum Home',
         rawLabel: 'Forum Home',
-        href: '/categories',
+        action: 'goToCategory',
+        actionParam: null,
         className: 'btn btn-header',
         contents: () => {
           return [
@@ -191,7 +224,8 @@
         items.push(this.attach('link', {
           rawTitle: c.name,
           rawLabel: c.name,
-          href: c.url,
+          action: 'goToCategory',
+          actionParam: c,
           className: 'btn btn-header',
           contents: () => {
             return [
@@ -203,6 +237,13 @@
       });
 
       return items;
+    },
+
+    goToCategory(category) {
+      this.state.showMenu = false;
+      this.scheduleRerender();
+      let url = category ? category.get('url') : '/categories';
+      DiscourseURL.routeTo(url);
     }
   })
 
@@ -260,19 +301,22 @@
       let html = [h('div.content', contents)];
 
       if (isMobile) {
-        html.push(h('div.mobile-menu', [
+        html.push(h('div.mobile-menu',
+          [
             this.attach('link', {
               action: 'scrollTo',
               actionParam: 'overlay-cta',
-              className: 'overlay-cta-link active'
+              className: 'overlay-cta-link active',
+              contents: () => h('div.link-circle')
             }),
             this.attach('link', {
               action: 'scrollTo',
               actionParam: 'overlay-text',
-              className: 'overlay-text-link'
+              className: 'overlay-text-link',
+              contents: () => h('div.link-circle')
             })
-          ])
-        )
+          ]
+        ))
       }
 
       return html;
@@ -281,11 +325,16 @@
     scrollTo(id) {
       let scrollLeft = $(`#${id}`).offset().left;
       if (scrollLeft !== 0) {
-        $('.guest-overlay .content').animate({ scrollLeft }, 20, () => {
+        $('.guest-overlay .content').animate({ scrollLeft }, 0, () => {
           $('.mobile-menu > a').removeClass('active');
           $(`.${id}-link`).addClass('active');
         });
       }
+    },
+
+    drag(e) {
+      let scrollToId = $(e.target).closest('.cta').length ? 'overlay-text' : 'overlay-cta';
+      this.scrollTo(scrollToId);
     }
   })
 
@@ -295,17 +344,18 @@
     html(args, state) {
       const path = args.currentPath.toLowerCase();
       let contents = [];
-
-      $('html').css('overflow-y', 'scroll');
+      let hasOverlay = false;
 
       if (path.indexOf('topic') > -1) {
         if (!this.currentUser) {
+          hasOverlay = true;
           contents.push(this.attach('guest-overlay'));
-          Ember.run.scheduleOnce('afterRender', () => {
-            $('html').css('overflow', 'hidden');
-          });
         }
       }
+
+      Ember.run.scheduleOnce('afterRender', () => {
+        $('body').toggleClass('topic-guest-overlay', hasOverlay);
+      });
 
       return contents;
     }

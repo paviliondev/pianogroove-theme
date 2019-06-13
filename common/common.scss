@@ -26,10 +26,11 @@ $pianogroove-turquoise: #00b38f;
   background-color: $pianogroove-blue;
   color: white;
 
-  &.discovery-categories {
+  &.discovery-categories, &.discovery-latest, &.discovery-top, &.loading-home {
     background-image: url($background);
     background-repeat: no-repeat;
     background-position: center;
+    background-size: cover;
   }
 
   .content {
@@ -261,7 +262,7 @@ html, html.discourse-no-touch, html.discourse-touch {
   width: 400px;
   background-color: white;
   margin-top: 15px;
-  padding: 5px 5px 5px 25px;
+  padding: 5px 5px 5px 20px;
   border-radius: 50px;
   display: flex;
   align-items: center;
@@ -271,10 +272,10 @@ html, html.discourse-no-touch, html.discourse-touch {
     flex: 1 1 auto;
     border: none;
     font-size: 1.2em;
-    line-height: 1.2em;
     height: 40px;
     width: auto;
-    max-width: calc(100% - 75px);
+    padding: 5px 10px;
+    margin-right: 5px;
   }
 
   .clear {
@@ -283,6 +284,14 @@ html, html.discourse-no-touch, html.discourse-touch {
 
     .btn {
       background-color: transparent;
+
+      .fa {
+        color: $primary;
+      }
+
+      &:hover .fa {
+        color: $primary;
+      }
     }
   }
 
@@ -294,6 +303,10 @@ html, html.discourse-no-touch, html.discourse-touch {
 
     .fa {
       color: white;
+    }
+
+    &:hover {
+      background-color: $pianogroove-blue;
     }
   }
 }
