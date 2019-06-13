@@ -18,15 +18,18 @@ body.topic-guest-overlay {
 
 #main-outlet {
   background-color: white;
-  padding-top: 1.5em;
+
+  &.with-header {
+    padding-top: 1.5em;
+  }
 }
 
 .pianogroove-header-container {
   font-family: 'Poppins', sans-serif;
-  padding-top: 60px;
 }
 
 .pianogroove-header {
+  padding-top: 60px;
   height: 510px;
   background-color: $pianogroove-blue;
   color: white;
@@ -36,6 +39,10 @@ body.topic-guest-overlay {
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+  }
+
+  &.hide-header {
+    display: none;
   }
 
   .content {

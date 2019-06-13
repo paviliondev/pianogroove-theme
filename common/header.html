@@ -104,10 +104,18 @@
 
     buildClasses(args, state) {
       let path = args.currentPath;
-      let classes = path.split('.').join('-').dasherize();
+      let splitPath = path.split('.');
+      let classes = splitPath.join('-').dasherize();
+
+      if (splitPath[0] === 'user' || splitPath[0] === 'admin') {
+        classes += ' hide-header';
+        return classes;
+      }
+
       if (path == 'discovery.loading' && state.homeRoute) {
         classes += ' loading-home';
       }
+
       return classes;
     },
 
@@ -118,10 +126,18 @@
       let isLoading = path === 'discovery.loading';
       let isCategory = path.indexOf('category') > -1;
       let isHome = path == 'discovery.latest' || path == 'discovery.categories' || path == 'discovery.top';
+      let isUser = path.split('.')[0] === 'user';
+      let isAdmin = path.split('.')[0] === 'admin';
       let contents = [];
       let header = [];
       let title;
       let description;
+
+      let nonHeaderRoute = isAdmin || isUser;
+
+      $('#main-outlet').toggleClass('with-header', !nonHeaderRoute);
+
+      if (nonHeaderRoute) return;
 
       if (isLoading) {
         if (state.contentsCache) {
