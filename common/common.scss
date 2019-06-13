@@ -7,6 +7,11 @@ $pianogroove-gold: #caad6f;
 $pianogroove-gold-dark: #A28C58;
 $pianogroove-turquoise: #00b38f;
 
+body.topic-guest-overlay {
+  max-height: 1000px;
+  overflow: hidden;
+}
+
 #main {
   background-color: $pianogroove-blue-light;
 }
@@ -180,20 +185,26 @@ html, html.discourse-no-touch, html.discourse-touch {
   z-index: 9998;
   color: white;
   background-color: rgba(0,0,0,0.85);
-  height: calc(100vh - 500px);
+  height: 100vh;
+  padding: 40px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-flow: column;
 
   .content {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
+    width: 1110px;
 
     .title {
-      font-size: 1.6em;
+      font-size: 1.8em;
+      font-weight: 800;
     }
   }
 
   .text {
-    padding: 20px;
     box-sizing: border-box;
     display: inline-block;
   }
@@ -206,7 +217,7 @@ html, html.discourse-no-touch, html.discourse-touch {
 
       li {
         list-style: none;
-        margin: 5px 0;
+        margin: 10px 0;
       }
 
       li:before{
@@ -250,6 +261,11 @@ html, html.discourse-no-touch, html.discourse-touch {
       .d-label {
         color: white;
       }
+    }
+
+    .login-link {
+      color: $pianogroove-turquoise;
+      text-decoration: underline;
     }
 
     .login span {

@@ -5,11 +5,6 @@ $pianogroove-gold: #caad6f;
 $pianogroove-gold-dark: #A28C58;
 $pianogroove-turquoise: #00b38f;
 
-body.topic-guest-overlay {
-  max-height: 1000px;
-  overflow: hidden;
-}
-
 #main-outlet {
   padding-top: 4.2857em;
 }
@@ -63,8 +58,6 @@ body.topic-guest-overlay {
 
 .guest-overlay {
   overflow: hidden;
-  padding: 20px 0;
-  height: 100vh;
 
   .content {
     -webkit-overflow-scrolling: touch;

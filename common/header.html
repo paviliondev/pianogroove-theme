@@ -98,15 +98,15 @@
       return {
         showMenu: false,
         contentsCache: null,
-        categoryRoute: null,
+        homeRoute: null,
       }
     },
 
     buildClasses(args, state) {
       let path = args.currentPath;
       let classes = path.split('.').join('-').dasherize();
-      if (path == 'discovery.loading') {
-        classes += state.categoryRoute ? ' loading-category' : ' loading-home';
+      if (path == 'discovery.loading' && state.homeRoute) {
+        classes += ' loading-home';
       }
       return classes;
     },
@@ -128,7 +128,7 @@
           return h('div.content', state.contentsCache);
         }
       } else {
-        state.categoryRoute = isCategory;
+        state.homeRoute = isHome;
       }
 
       if (isCategory) {
