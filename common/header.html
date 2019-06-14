@@ -120,20 +120,30 @@
     },
 
     html(args, state) {
-      const controller = this.register.lookup('controller:navigation/category');
-      const category = controller.get("category");
+      const navController = this.register.lookup('controller:navigation/category');
+      const topicController = this.register.lookup('controller:topic');
       const path = args.currentPath.toLowerCase();
+      const rootPath = path.split('.')[0];
       let isLoading = path === 'discovery.loading';
       let isCategory = path.indexOf('category') > -1;
       let isHome = path == 'discovery.latest' || path == 'discovery.categories' || path == 'discovery.top';
-      let isUser = path.split('.')[0] === 'user';
-      let isAdmin = path.split('.')[0] === 'admin';
+      let isUser = rootPath === 'user';
+      let isAdmin = rootPath === 'admin';
+      let isTopic = rootPath === 'topic';
       let contents = [];
       let header = [];
       let title;
       let description;
-
       let nonHeaderRoute = isAdmin || isUser;
+
+      let category;
+      if (isCategory) {
+        category = navController.get("category");
+      } else {
+        category = topicController.get("model.category");
+      }
+
+      console.log(category)
 
       $('#main-outlet').toggleClass('with-header', !nonHeaderRoute);
 
@@ -147,7 +157,7 @@
         state.homeRoute = isHome;
       }
 
-      if (isCategory) {
+      if (isCategory || isTopic) {
         header.push(h('div.image',
           h('img', {
             attributes: {

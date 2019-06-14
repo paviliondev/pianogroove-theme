@@ -14,9 +14,9 @@ $pianogroove-turquoise: #00b38f;
 }
 
 .pianogroove-header {
-  height: 510px;
+  padding-top: 0;
 
-  &.discovery-categories {
+  &.discovery-categories, &.discovery-latest, &.discovery-top, &.loading-home {
     background-image: url($background-mobile);
   }
 
@@ -30,6 +30,15 @@ $pianogroove-turquoise: #00b38f;
     .text {
       width: 100%;
     }
+
+    .image {
+      margin-right: 0;
+      margin-bottom: 10px;
+    }
+  }
+
+  .header-wrapper {
+    flex-direction: column;
   }
 
   .menu {

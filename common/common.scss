@@ -30,7 +30,7 @@ body.topic-guest-overlay {
 
 .pianogroove-header {
   padding-top: 60px;
-  height: 510px;
+  min-height: 320px;
   background-color: $pianogroove-blue;
   color: white;
 
@@ -39,6 +39,7 @@ body.topic-guest-overlay {
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+    min-height: 510px;
   }
 
   &.hide-header {
@@ -48,7 +49,7 @@ body.topic-guest-overlay {
   .content {
     width: 1126px;
     margin: 0 auto;
-    min-height: 100%;
+    min-height: inherit;
     display: flex;
     flex-direction: column;
   }
@@ -62,14 +63,14 @@ body.topic-guest-overlay {
 
   .header-wrapper {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
   }
 
   .image {
     margin-right: 30px;
 
     img {
-      max-height: 100px;
+      max-height: 90px;
     }
   }
 
@@ -80,7 +81,8 @@ body.topic-guest-overlay {
     }
 
     .description {
-      font-size: 1.6em;
+      font-size: 1.5em;
+      max-width: 900px;
     }
   }
 
