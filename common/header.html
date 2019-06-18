@@ -122,6 +122,7 @@
     html(args, state) {
       const navController = this.register.lookup('controller:navigation/category');
       const topicController = this.register.lookup('controller:topic');
+      const searchController = this.register.lookup('controller:full-page-search');
       const path = args.currentPath.toLowerCase();
       const rootPath = path.split('.')[0];
       let isLoading = path === 'discovery.loading';
@@ -130,10 +131,12 @@
       let isUser = rootPath === 'user';
       let isAdmin = rootPath === 'admin';
       let isTopic = rootPath === 'topic';
+      let isSearch = path === 'full-page-search';
       let contents = [];
       let header = [];
       let title;
       let description;
+      let intro;
       let nonHeaderRoute = isAdmin || isUser;
 
       let category;
@@ -142,8 +145,6 @@
       } else {
         category = topicController.get("model.category");
       }
-
-      console.log(category)
 
       $('#main-outlet').toggleClass('with-header', !nonHeaderRoute);
 
@@ -170,10 +171,18 @@
       } else if (isHome) {
         title = settings.home_title;
         description = settings.home_description;
+      } else if (isSearch) {
+        header.push(h('div.image.search', iconNode('search')));
+        intro = 'Search results for';
+        title = searchController.get('searchTerm');
+        description = `${searchController.get('resultCount')} forum threads found`;
       }
 
-      if (title || description) {
+      if (intro || title || description) {
         let text = [];
+        if (intro) {
+          text.push(h('div.intro', intro));
+        }
         if (title) {
           text.push(h('div.title', title))
         }

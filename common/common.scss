@@ -72,17 +72,32 @@ body.topic-guest-overlay {
     img {
       max-height: 90px;
     }
+
+    &.search {
+      background-color: $pianogroove-turquoise;
+      padding: 15px;
+      border-radius: 50%;
+
+      .fa {
+        font-size: 30px;
+      }
+    }
   }
 
   .text {
+    .intro {
+      font-size: 1.4em;
+    }
+
     .title {
       font-size: 3em;
       font-weight: 800;
+      margin-bottom: 5px;
     }
 
     .description {
-      font-size: 1.5em;
-      max-width: 900px;
+      font-size: 1.4em;
+      max-width: 550px;
     }
   }
 
