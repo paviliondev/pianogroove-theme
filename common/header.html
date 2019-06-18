@@ -175,7 +175,13 @@
         header.push(h('div.image.search', iconNode('search')));
         intro = 'Search results for';
         title = searchController.get('searchTerm');
-        description = `${searchController.get('resultCount')} forum threads found`;
+
+        const resultCount = searchController.get('resultCount');
+        if (resultCount) {
+          description = `${} forum threads found`;
+        } else {
+          description = 'No forum threads found';
+        }
       }
 
       if (intro || title || description) {
