@@ -35,6 +35,12 @@ $pianogroove-turquoise: #00b38f;
     background-position: center;
     background-size: cover;
     min-height: 510px;
+
+    .header-wrapper .text .description {
+      font-size: 1.4em;
+      max-width: 550px;
+      line-height: 1.8em;
+    }
   }
 
   &.hide-header {
@@ -91,9 +97,7 @@ $pianogroove-turquoise: #00b38f;
     }
 
     .description {
-      font-size: 1.4em;
-      max-width: 550px;
-      line-height: 1.8em;
+      max-width: 700px;
     }
   }
 
@@ -261,14 +265,14 @@ html, html.discourse-no-touch, html.discourse-touch {
 
     .logo {
       img {
-        width: 120px;
+        width: 140px;
       }
     }
 
     .btn-cta {
       margin: 20px 0;
       background-color: $pianogroove-turquoise;
-      padding: 15px 30px;
+      padding: 25px 60px;
       font-size: 1.2em;
       font-weight: 800;
       text-transform: uppercase;
