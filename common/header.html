@@ -283,7 +283,7 @@
     goToCategory(category) {
       this.state.showMenu = false;
       this.scheduleRerender();
-      let url = category ? category.get('url') : '/categories';
+      let url = category ? category.get('url') : '/latest';
       DiscourseURL.routeTo(url);
     }
   })
