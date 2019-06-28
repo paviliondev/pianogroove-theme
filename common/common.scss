@@ -160,6 +160,10 @@ $pianogroove-turquoise: #00b38f;
 
 .btn-blue {
   background-color: $pianogroove-blue;
+
+  span {
+    color: white;
+  }
 }
 
 html, html.discourse-no-touch, html.discourse-touch {
@@ -190,14 +194,6 @@ html, html.discourse-no-touch, html.discourse-touch {
       background-color: $pianogroove-gold-dark;
       color: white;
     }
-  }
-
-  .d-header .login-button {
-    @extend .btn-blue;
-  }
-
-  .d-header button.sign-up-button {
-    @extend .btn-gold;
   }
 }
 
