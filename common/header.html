@@ -103,11 +103,13 @@
     },
 
     buildClasses(args, state) {
+      const topicController = this.topicController();
+      const isPM = topicController.get('model.isPrivateMessage');
       let path = args.currentPath;
       let splitPath = path.split('.');
       let classes = splitPath.join('-').dasherize();
 
-      if (splitPath[0] === 'user' || splitPath[0] === 'admin') {
+      if (splitPath[0] === 'user' || splitPath[0] === 'admin' || isPM) {
         classes += ' hide-header';
         return classes;
       }
@@ -119,12 +121,19 @@
       return classes;
     },
 
+    topicController() {
+      const topicController = this.register.lookup('controller:topic');;
+      return topicController;
+    },
+
     html(args, state) {
       const navController = this.register.lookup('controller:navigation/category');
-      const topicController = this.register.lookup('controller:topic');
+      const topicController = this.topicController();
       const searchController = this.register.lookup('controller:full-page-search');
       const path = args.currentPath.toLowerCase();
       const rootPath = path.split('.')[0];
+      const isPM = topicController.get('model.isPrivateMessage');
+
       let isLoading = path === 'discovery.loading';
       let isCategory = path.indexOf('category') > -1;
       let isHome = path == 'discovery.latest' || path == 'discovery.categories' || path == 'discovery.top';
@@ -137,7 +146,7 @@
       let title;
       let description;
       let intro;
-      let nonHeaderRoute = isAdmin || isUser;
+      let nonHeaderRoute = isAdmin || isUser || isPM;
 
       let category;
       if (isCategory) {
