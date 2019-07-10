@@ -36,10 +36,16 @@ $pianogroove-turquoise: #00b38f;
     background-size: cover;
     min-height: 510px;
 
-    .header-wrapper .text .description {
-      font-size: 1.4em;
-      max-width: 550px;
-      line-height: 1.8em;
+    .header-wrapper .text {
+      .title {
+        font-size: 3em;
+      }
+
+      .description {
+        font-size: 1.4em;
+        max-width: 550px;
+        line-height: 1.8em;
+      }
     }
   }
 
@@ -91,7 +97,7 @@ $pianogroove-turquoise: #00b38f;
     }
 
     .title {
-      font-size: 3em;
+      font-size: 2em;
       font-weight: 800;
       margin-bottom: 5px;
     }
