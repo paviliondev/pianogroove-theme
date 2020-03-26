@@ -42,7 +42,26 @@ $pianogroove-turquoise: #00b38f;
   }
 
   .menu {
-    display: none;
+    flex-direction: column;
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    z-index: 999;
+
+    .btn-header {
+      width: 100%;
+      padding: 25px 18px;
+      display: inline-flex;
+      justify-content: space-between;
+      box-sizing: border-box;
+    }
+
+    .menu-items {
+      position: absolute;
+      top: 65px;
+      z-index: 100;
+      width: 100%;
+    }
   }
 }
 
