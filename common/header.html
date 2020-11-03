@@ -5,6 +5,8 @@
   const RawHtml = require("discourse/widgets/raw-html").default;
   const { iconNode } = require("discourse-common/lib/icon-library");
   const DiscourseURL = require("discourse/lib/url").default;
+  const getURL = require("discourse-common/lib/get-url");
+
 
   api.createWidget('pianogroove-header-search', {
     tagName: 'div.pianogroove-header-search',
@@ -171,7 +173,7 @@
         header.push(h('div.image',
           h('img', {
             attributes: {
-              src: Discourse.getURLWithCDN(category.get("uploaded_logo.url"))
+              src: getURL.getURLWithCDN(category.get("uploaded_logo.url"))
             }
           })
         ));
