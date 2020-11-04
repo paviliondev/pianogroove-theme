@@ -5,6 +5,9 @@
   const RawHtml = require("discourse/widgets/raw-html").default;
   const { iconNode } = require("discourse-common/lib/icon-library");
   const DiscourseURL = require("discourse/lib/url").default;
+  const { getURLWithCDN } = require("discourse-common/lib/get-url");
+  const currentUser = api.getCurrentUser();
+  const { scheduleOnce } = require("@ember/runloop");
 
   api.createWidget('pianogroove-header-search', {
     tagName: 'div.pianogroove-header-search',
@@ -171,7 +174,7 @@
         header.push(h('div.image',
           h('img', {
             attributes: {
-              src: Discourse.getURLWithCDN(category.get("uploaded_logo.url"))
+              src: getURLWithCDN(category.get("uploaded_logo.url"))
             }
           })
         ));
@@ -403,7 +406,7 @@
         }
       }
 
-      Ember.run.scheduleOnce('afterRender', () => {
+      scheduleOnce('afterRender', () => {
         $('body').toggleClass('topic-guest-overlay', hasOverlay);
       });
 
