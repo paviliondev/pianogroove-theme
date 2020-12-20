@@ -7,3 +7,5 @@ guest_overlay_list:
   default: ""
   description:
     en: A list of text items that appears on the guest overlay
+login_link: 'https://pianogroove.memberful.com/auth/sign_in'
+sign_up_link: 'https://www.pianogroove.com/join/?utm_source=forum&utm_medium=button&utm_content=overlay'

@@ -324,7 +324,7 @@
 
       cta.push([
         this.attach('link', {
-          href: 'https://pianogroove.com/pianogroove-pro/',
+          href: settings.get_started_link,
           rawLabel: 'Get Started',
           rawTitle: 'Get Started',
           className: 'btn btn-cta'
@@ -332,7 +332,7 @@
         h('div.login', [
           h('span', 'Do you have an account?'),
           this.attach('link', {
-            href: 'https://pianogroove.memberful.com/auth/sign_in',
+            href: settings.login_link,
             rawLabel: 'Login',
             rawTitle: 'Login',
             className: 'login-link'
